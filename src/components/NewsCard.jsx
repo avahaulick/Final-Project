@@ -1,5 +1,6 @@
-const FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=60'
+import fallbackImage from '../assets/hero.png'
+
+const FALLBACK_IMAGE = fallbackImage
 
 function BookmarkIcon({ filled }) {
   return (
