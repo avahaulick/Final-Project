@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import MainPage from './pages/MainPage'
 import SavedNewsPage from './pages/SavedNewsPage'
 import { fetchArticles } from './utils/newsApi'
+import './components/components.css'
 import './App.css'
 
 function App() {
