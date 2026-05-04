@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import NewsCard from './NewsCard'
+import Preloader from './Preloader'
 
 function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, description, emptyCopy }) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -13,13 +14,7 @@ function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, d
         {description ? <p className="cards__subtitle">{description}</p> : null}
       </div>
 
-      {isLoading ? (
-        <div className="state-placeholder">
-          <div className="state-placeholder__spinner" role="status" aria-label="Loading" />
-          <p className="state-placeholder__title">Searching for news…</p>
-          <p className="state-placeholder__text">Please wait a moment.</p>
-        </div>
-      ) : null}
+      {isLoading ? <Preloader /> : null}
 
       {!isLoading && fetchError ? (
         <div className="state-placeholder">

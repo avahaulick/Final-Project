@@ -4,7 +4,7 @@ import NewsCardList from '../components/NewsCardList'
 function SavedNewsPage({ articles, isLoggedIn, onLoginClick, onLogout, onSaveArticle, userName }) {
   const keywords = [...new Set(articles.map((article) => article.keyword))]
   const keywordText = keywords.length
-    ? `${keywords.slice(0, 2).join(', ')}${keywords.length > 2 ? `, and ${keywords.length - 2} other` : ''}`
+    ? `${keywords.slice(0, 2).join(', ')}${keywords.length > 2 ? `, and ${keywords.length - 2} other${keywords.length - 2 > 1 ? 's' : ''}` : ''}`
     : 'your saved topics'
 
   return (

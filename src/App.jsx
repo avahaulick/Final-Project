@@ -11,6 +11,7 @@ import './App.css'
 function App() {
   const [fetchedArticles, setFetchedArticles] = useState([])
   const [savedIds, setSavedIds] = useState(new Set())
+  const [savedArticlesMap, setSavedArticlesMap] = useState({})
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [activeModal, setActiveModal] = useState(null)
   const [searchInput, setSearchInput] = useState('')
@@ -24,7 +25,7 @@ function App() {
     saved: savedIds.has(article.id),
   }))
 
-  const savedArticles = articles.filter((article) => article.saved)
+  const savedArticles = Object.values(savedArticlesMap)
 
   const runSearch = useCallback(async (query) => {
     if (abortRef.current) {
@@ -83,6 +84,17 @@ function App() {
         next.delete(articleId)
       } else {
         next.add(articleId)
+      }
+      return next
+    })
+
+    setSavedArticlesMap((current) => {
+      const next = { ...current }
+      if (next[articleId]) {
+        delete next[articleId]
+      } else {
+        const article = fetchedArticles.find((a) => a.id === articleId)
+        if (article) next[articleId] = article
       }
       return next
     })

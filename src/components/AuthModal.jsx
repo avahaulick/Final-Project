@@ -1,7 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function AuthModal({ mode, onClose, onSwitchMode, onAuthenticate }) {
   const [signupDone, setSignupDone] = useState(false)
+
+  useEffect(() => {
+    if (!mode) return
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        setSignupDone(false)
+        onClose()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [mode, onClose])
 
   if (!mode) return null
 

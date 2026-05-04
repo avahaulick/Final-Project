@@ -30,6 +30,7 @@ function MainPage({
       </section>
 
       <NewsCardList
+        key={submittedQuery}
         articles={articles}
         isLoading={isLoading}
         fetchError={fetchError}
