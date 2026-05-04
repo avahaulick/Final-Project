@@ -34,7 +34,7 @@ function NewsCard({ article, onSaveArticle }) {
         <img
           className="card__image"
           src={article.image ?? FALLBACK_IMAGE}
-          alt=""
+          alt={article.title || 'News article image'}
           onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE }}
         />
       </a>

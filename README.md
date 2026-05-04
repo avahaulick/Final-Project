@@ -2,6 +2,10 @@
 
 Stage 1 frontend workspace for the TripleTen final project.
 
+## Live Demo
+
+https://avahaulick.github.io/Final-Project/
+
 ## Stack
 
 - React
@@ -19,6 +23,20 @@ Stage 1 frontend workspace for the TripleTen final project.
 - `npm run dev`
 - `npm run build`
 - `npm run lint`
+- `npm run deploy`
+
+## Stage 1 Submission Checks
+
+Run these before submission:
+
+1. `npm run build`
+2. `npm run lint`
+3. `npm run deploy`
+
+Routes to verify in the browser:
+
+- `/`
+- `/saved-news`
 
 ## Next setup inputs
 
