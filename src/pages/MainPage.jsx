@@ -20,9 +20,9 @@ function MainPage({
       <Header isLoggedIn={isLoggedIn} onLoginClick={onLoginClick} onLogout={onLogout} userName="Marquis" />
 
       <section className="hero">
-        <div className="page-shell hero__inner">
+        <div className="hero__inner">
           <h1 className="hero__title">What&apos;s going on in the world?</h1>
-          <p className="hero__text">
+          <p className="hero__subtitle">
             Find the latest news on any topic and save the articles you want to revisit.
           </p>
           <SearchForm onSearchSubmit={onSearchSubmit} onQueryChange={onQueryChange} query={query} />
@@ -37,10 +37,10 @@ function MainPage({
         title="Search results"
         description={
           submittedQuery.trim()
-            ? `Showing articles for "${submittedQuery.trim()}".`
-            : 'Enter a keyword above and press Search to load articles.'
+            ? `Found ${articles.length} result${articles.length !== 1 ? 's' : ''} for "${submittedQuery.trim()}"`
+            : null
         }
-        emptyCopy="Try a broader keyword like climate, design, or news."
+        emptyCopy="Sorry, but nothing matched your search terms, please try again with some different keywords."
       />
     </div>
   )

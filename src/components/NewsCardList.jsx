@@ -7,40 +7,33 @@ function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, d
   const canShowMore = !isExpanded && articles.length > 3
 
   return (
-    <section className="cards page-shell" aria-labelledby="cards-heading">
+    <section className="cards" aria-labelledby="cards-heading">
       <div className="cards__header">
-        <div>
-          <h2 id="cards-heading" className="cards__title">
-            {title}
-          </h2>
-          <p className="cards__description">{description}</p>
-        </div>
+        <h2 id="cards-heading" className="cards__title">{title}</h2>
+        {description ? <p className="cards__subtitle">{description}</p> : null}
       </div>
 
       {isLoading ? (
-        <div className="empty-state">
-          <div className="empty-state__icon">…</div>
-          <p className="empty-state__eyebrow">Loading</p>
-          <h3>Searching the latest headlines</h3>
-          <p>Fetching a fresh set of stories for the current keyword.</p>
+        <div className="state-placeholder">
+          <div className="state-placeholder__spinner" role="status" aria-label="Loading" />
+          <p className="state-placeholder__title">Searching for news…</p>
+          <p className="state-placeholder__text">Please wait a moment.</p>
         </div>
       ) : null}
 
       {!isLoading && fetchError ? (
-        <div className="empty-state">
-          <div className="empty-state__icon">!</div>
-          <p className="empty-state__eyebrow">Something went wrong</p>
-          <h3>Could not load results</h3>
-          <p>{fetchError}</p>
+        <div className="state-placeholder">
+          <p className="state-placeholder__icon">⚠️</p>
+          <p className="state-placeholder__title">Something went wrong</p>
+          <p className="state-placeholder__text">{fetchError}</p>
         </div>
       ) : null}
 
       {!isLoading && !fetchError && !articles.length ? (
-        <div className="empty-state">
-          <div className="empty-state__icon">⌕</div>
-          <p className="empty-state__eyebrow">No results</p>
-          <h3>Nothing matched this search yet</h3>
-          <p>{emptyCopy}</p>
+        <div className="state-placeholder">
+          <p className="state-placeholder__icon">🗞️</p>
+          <p className="state-placeholder__title">Nothing found</p>
+          <p className="state-placeholder__text">{emptyCopy}</p>
         </div>
       ) : null}
 
@@ -52,7 +45,7 @@ function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, d
             ))}
           </div>
           {canShowMore ? (
-            <button type="button" className="cards__button" onClick={() => setIsExpanded(true)}>
+            <button type="button" className="cards__more" onClick={() => setIsExpanded(true)}>
               Show more
             </button>
           ) : null}

@@ -8,7 +8,7 @@ function SavedNewsPage({ articles, isLoggedIn, onLoginClick, onLogout, onSaveArt
     : 'your saved topics'
 
   return (
-    <div className="page page-saved">
+    <div className="page">
       <Header
         isLoggedIn={isLoggedIn}
         onLoginClick={onLoginClick}
@@ -17,23 +17,26 @@ function SavedNewsPage({ articles, isLoggedIn, onLoginClick, onLogout, onSaveArt
         userName={userName}
       />
 
-      <section className="saved-hero page-shell">
-        <p className="saved-hero__label">Saved articles</p>
-        <h1 className="saved-hero__title">
-          {userName}, you have {articles.length} saved article{articles.length === 1 ? '' : 's'}.
-        </h1>
-        <p className="saved-hero__keywords">
-          By keywords: <span>{keywordText}</span>
-        </p>
+      <section className="saved-hero">
+        <div className="page-shell">
+          <p className="saved-hero__label">Saved articles</p>
+          <h1 className="saved-hero__title">
+            {userName}, you have {articles.length} saved article{articles.length === 1 ? '' : 's'}.
+          </h1>
+          <p className="saved-hero__keywords">
+            By keywords: <strong>{keywordText}</strong>
+          </p>
+        </div>
       </section>
 
       <NewsCardList
         articles={articles}
         isLoading={false}
+        fetchError={null}
         onSaveArticle={onSaveArticle}
-        title="Saved stories"
-        description="Use this page as the base for the logged-in saved news layout from the Figma file."
-        emptyCopy="Save an article from the homepage and it will appear here."
+        title="Saved articles"
+        description={null}
+        emptyCopy="You haven’t saved any articles yet. Search on the home page and click the bookmark icon to save."
       />
     </div>
   )

@@ -1,12 +1,22 @@
 function Footer() {
   return (
     <footer className="footer">
-      <p>© 2026 Final Project by Shawn Haulick</p>
+      <p className="footer__copy">© 2026 Shawn Haulick, Powered by NewsAPI</p>
       <div className="footer__links">
-        <a href="https://tripleten.com" target="_blank" rel="noreferrer">
+        <a
+          className="footer__link"
+          href="https://tripleten.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           TripleTen
         </a>
-        <a href="https://github.com/avahaulick" target="_blank" rel="noreferrer">
+        <a
+          className="footer__link"
+          href="https://github.com/avahaulick"
+          target="_blank"
+          rel="noreferrer"
+        >
           GitHub
         </a>
       </div>

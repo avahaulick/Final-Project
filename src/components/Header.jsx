@@ -1,31 +1,52 @@
 import { NavLink } from 'react-router-dom'
 
 function Header({ isLoggedIn, onLoginClick, onLogout, theme = 'light', userName }) {
-  const toneClass = theme === 'dark' ? 'dark' : 'light'
+  const isLight = theme === 'dark'
 
   return (
-    <header className={`topbar ${theme === 'dark' ? 'saved' : ''}`}>
+    <header className={`topbar${isLight ? ' topbar--light' : ''}`}>
       <div className="page-shell topbar__content">
-        <NavLink to="/" className={`brand ${toneClass}`}>
+        <NavLink to="/" className={`brand${isLight ? ' brand--dark' : ''}`}>
           NewsExplorer
         </NavLink>
 
         <nav className="topbar__nav" aria-label="Primary navigation">
-          <NavLink to="/" end className={({ isActive }) => `topbar__link ${toneClass}${isActive ? ' active' : ''}`}>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `topbar__link${isLight ? ' topbar__link--dark' : ''}${isActive ? ' active' : ''}`
+            }
+          >
             Home
           </NavLink>
-          <NavLink
-            to="/saved-news"
-            className={({ isActive }) => `topbar__link ${toneClass}${isActive ? ' active' : ''}`}
-          >
-            Saved articles
-          </NavLink>
+
           {isLoggedIn ? (
-            <button type="button" className={`topbar__button ${toneClass}`} onClick={onLogout}>
+            <NavLink
+              to="/saved-news"
+              className={({ isActive }) =>
+                `topbar__link${isLight ? ' topbar__link--dark' : ''}${isActive ? ' active' : ''}`
+              }
+            >
+              Saved articles
+            </NavLink>
+          ) : null}
+
+          {isLoggedIn ? (
+            <button
+              type="button"
+              className={`topbar__button${isLight ? ' topbar__button--dark' : ''}`}
+              onClick={onLogout}
+            >
               {userName || 'Profile'}
+              <span className="topbar__logout-icon" aria-hidden="true">↗</span>
             </button>
           ) : (
-            <button type="button" className={`topbar__button ${toneClass}`} onClick={onLoginClick}>
+            <button
+              type="button"
+              className={`topbar__button${isLight ? ' topbar__button--dark' : ''}`}
+              onClick={onLoginClick}
+            >
               Sign in
             </button>
           )}

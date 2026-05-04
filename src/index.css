@@ -1,7 +1,23 @@
+/* ── Design tokens ── */
 :root {
-  color: #1a1b22;
-  background: #ffffff;
-  font: 16px/1.5 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --color-dark: #1a1b22;
+  --color-blue: #2f71e5;
+  --color-blue-hover: #347eff;
+  --color-bg: #f5f6f7;
+  --color-white: #ffffff;
+  --color-text-secondary: #b6bcbf;
+  --color-border: #d1d2d6;
+  --color-overlay: rgba(0, 0, 0, 0.5);
+
+  --font-body: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Roboto Slab', 'Times New Roman', serif;
+
+  --container: 1440px;
+  --container-padding: 104px;
+
+  color: var(--color-dark);
+  background: var(--color-white);
+  font: 16px/1.5 var(--font-body);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -30,29 +46,24 @@ h1,
 h2,
 h3 {
   margin: 0;
-  font-family: 'Roboto Slab', 'Times New Roman', serif;
+  font-family: var(--font-heading);
   font-weight: 400;
-  line-height: 1.15;
+  line-height: 1.08;
+  color: var(--color-dark);
 }
 
-h1 {
-  font-size: clamp(2.5rem, 5vw, 3.75rem);
-}
+h1 { font-size: clamp(2.5rem, 4vw, 3.75rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+h3 { font-size: clamp(1.125rem, 2vw, 1.375rem); }
 
-h2 {
-  font-size: clamp(1.85rem, 3vw, 2.5rem);
-}
+p, li { margin: 0; }
 
-p,
-li {
-  margin: 0;
-}
+a { color: inherit; }
 
-a {
-  color: inherit;
-}
-
-button,
-input {
+button, input, textarea {
   font: inherit;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
