@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function AuthModal({ mode, onClose, onSwitchMode, onAuthenticate }) {
   const [signupDone, setSignupDone] = useState(false)
+  const nameRef = useRef('')
 
   useEffect(() => {
     if (!mode) return
@@ -21,10 +22,12 @@ function AuthModal({ mode, onClose, onSwitchMode, onAuthenticate }) {
 
   function handleSubmit(event) {
     event.preventDefault()
+    const form = event.currentTarget
     if (isSignup) {
+      nameRef.current = form.elements['name']?.value ?? ''
       setSignupDone(true)
     } else {
-      onAuthenticate()
+      onAuthenticate(nameRef.current || form.elements['email']?.value || 'User')
     }
   }
 

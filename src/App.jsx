@@ -12,7 +12,12 @@ function App() {
   const [fetchedArticles, setFetchedArticles] = useState([])
   const [savedIds, setSavedIds] = useState(new Set())
   const [savedArticlesMap, setSavedArticlesMap] = useState({})
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    () => localStorage.getItem('ne_token') === 'stub'
+  )
+  const [userName, setUserName] = useState(
+    () => localStorage.getItem('ne_userName') ?? ''
+  )
   const [activeModal, setActiveModal] = useState(null)
   const [searchInput, setSearchInput] = useState('')
   const [submittedQuery, setSubmittedQuery] = useState('')
@@ -41,7 +46,7 @@ function App() {
       setFetchedArticles(results)
     } catch (error) {
       if (error.name !== 'AbortError') {
-        setFetchError(error.message ?? 'Something went wrong. Please try again.')
+        setFetchError(error.message ?? 'Sorry, something went wrong during the request. Please try again later.')
       }
     } finally {
       setIsLoading(false)
@@ -64,9 +69,7 @@ function App() {
     setActiveModal(null)
   }
 
-  function handleSearchSubmit(event) {
-    event.preventDefault()
-    const query = searchInput.trim()
+  function handleSearchSubmit(query) {
     if (!query) return
     setSubmittedQuery(query)
     runSearch(query)
@@ -100,13 +103,20 @@ function App() {
     })
   }
 
-  function handleAuthenticate() {
+  function handleAuthenticate(name) {
+    const resolvedName = (name ?? '').trim() || 'User'
+    localStorage.setItem('ne_token', 'stub')
+    localStorage.setItem('ne_userName', resolvedName)
+    setUserName(resolvedName)
     setIsLoggedIn(true)
     closeModal()
   }
 
   function handleLogout() {
+    localStorage.removeItem('ne_token')
+    localStorage.removeItem('ne_userName')
     setIsLoggedIn(false)
+    setUserName('')
   }
 
   return (
@@ -140,7 +150,7 @@ function App() {
               onLoginClick={() => openModal('signin')}
               onLogout={handleLogout}
               onSaveArticle={handleToggleSave}
-              userName="Marquis"
+              userName={userName}
             />
           }
         />

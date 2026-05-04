@@ -2,10 +2,10 @@ import { useState } from 'react'
 import NewsCard from './NewsCard'
 import Preloader from './Preloader'
 
-function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, description, emptyCopy }) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const visibleArticles = isExpanded ? articles : articles.slice(0, 3)
-  const canShowMore = !isExpanded && articles.length > 3
+function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, description, emptyCopy, isLoggedIn }) {
+  const [visibleCount, setVisibleCount] = useState(3)
+  const visibleArticles = articles.slice(0, visibleCount)
+  const canShowMore = visibleCount < articles.length
 
   return (
     <section className="cards" aria-labelledby="cards-heading">
@@ -36,11 +36,11 @@ function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, d
         <>
           <div className="cards__grid">
             {visibleArticles.map((article) => (
-              <NewsCard key={article.id} article={article} onSaveArticle={onSaveArticle} />
+              <NewsCard key={article.id} article={article} onSaveArticle={onSaveArticle} isLoggedIn={isLoggedIn} />
             ))}
           </div>
           {canShowMore ? (
-            <button type="button" className="cards__more" onClick={() => setIsExpanded(true)}>
+            <button type="button" className="cards__more" onClick={() => setVisibleCount((c) => c + 3)}>
               Show more
             </button>
           ) : null}

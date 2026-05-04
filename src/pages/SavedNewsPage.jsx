@@ -34,6 +34,7 @@ function SavedNewsPage({ articles, isLoggedIn, onLoginClick, onLogout, onSaveArt
         isLoading={false}
         fetchError={null}
         onSaveArticle={onSaveArticle}
+        isLoggedIn={true}
         title="Saved articles"
         description={null}
         emptyCopy="You haven’t saved any articles yet. Search on the home page and click the bookmark icon to save."

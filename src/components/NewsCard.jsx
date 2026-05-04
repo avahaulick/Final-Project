@@ -21,7 +21,7 @@ function BookmarkIcon({ filled }) {
   )
 }
 
-function NewsCard({ article, onSaveArticle }) {
+function NewsCard({ article, onSaveArticle, isLoggedIn }) {
   return (
     <article className="card">
       <a
@@ -49,6 +49,9 @@ function NewsCard({ article, onSaveArticle }) {
         aria-label={article.saved ? 'Remove from saved articles' : 'Save article'}
       >
         <BookmarkIcon filled={article.saved} />
+        {!isLoggedIn && (
+          <span className="card__bookmark-tooltip">Sign in to save articles</span>
+        )}
       </button>
 
       <div className="card__content">

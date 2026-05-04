@@ -1,5 +1,18 @@
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY
-const BASE_URL = 'https://newsapi.org/v2/everything'
+const BASE_URL =
+  import.meta.env.MODE === 'production'
+    ? 'https://nomoreparties.co/news/v2/everything'
+    : 'https://newsapi.org/v2/everything'
+
+function getFromDate() {
+  const d = new Date()
+  d.setDate(d.getDate() - 7)
+  return d.toISOString().slice(0, 10)
+}
+
+function getToDate() {
+  return new Date().toISOString().slice(0, 10)
+}
 
 /**
  * Fetch news articles for a given keyword.
@@ -14,9 +27,9 @@ export async function fetchArticles(query) {
 
   const params = new URLSearchParams({
     q: query.trim(),
-    language: 'en',
-    sortBy: 'publishedAt',
-    pageSize: '12',
+    from: getFromDate(),
+    to: getToDate(),
+    pageSize: '100',
     apiKey: API_KEY,
   })
 

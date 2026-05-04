@@ -35,6 +35,7 @@ function MainPage({
         isLoading={isLoading}
         fetchError={fetchError}
         onSaveArticle={onSaveArticle}
+        isLoggedIn={isLoggedIn}
         title="Search results"
         description={
           submittedQuery.trim()
