@@ -5,6 +5,7 @@ import SearchForm from '../components/SearchForm'
 function MainPage({
   articles,
   isLoading,
+  fetchError,
   isLoggedIn,
   onLoginClick,
   onLogout,
@@ -31,12 +32,13 @@ function MainPage({
       <NewsCardList
         articles={articles}
         isLoading={isLoading}
+        fetchError={fetchError}
         onSaveArticle={onSaveArticle}
         title="Search results"
         description={
           submittedQuery.trim()
-            ? `Showing articles for “${submittedQuery.trim()}”.`
-            : 'Use the search bar to filter the current article feed.'
+            ? `Showing articles for "${submittedQuery.trim()}".`
+            : 'Enter a keyword above and press Search to load articles.'
         }
         emptyCopy="Try a broader keyword like climate, design, or news."
       />

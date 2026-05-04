@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import NewsCard from './NewsCard'
 
-function NewsCardList({ articles, isLoading, onSaveArticle, title, description, emptyCopy }) {
+function NewsCardList({ articles, isLoading, fetchError, onSaveArticle, title, description, emptyCopy }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const visibleArticles = isExpanded ? articles : articles.slice(0, 3)
   const canShowMore = !isExpanded && articles.length > 3
@@ -26,7 +26,16 @@ function NewsCardList({ articles, isLoading, onSaveArticle, title, description, 
         </div>
       ) : null}
 
-      {!isLoading && !articles.length ? (
+      {!isLoading && fetchError ? (
+        <div className="empty-state">
+          <div className="empty-state__icon">!</div>
+          <p className="empty-state__eyebrow">Something went wrong</p>
+          <h3>Could not load results</h3>
+          <p>{fetchError}</p>
+        </div>
+      ) : null}
+
+      {!isLoading && !fetchError && !articles.length ? (
         <div className="empty-state">
           <div className="empty-state__icon">⌕</div>
           <p className="empty-state__eyebrow">No results</p>
@@ -35,7 +44,7 @@ function NewsCardList({ articles, isLoading, onSaveArticle, title, description, 
         </div>
       ) : null}
 
-      {!isLoading && articles.length ? (
+      {!isLoading && !fetchError && articles.length ? (
         <>
           <div className="cards__grid">
             {visibleArticles.map((article) => (

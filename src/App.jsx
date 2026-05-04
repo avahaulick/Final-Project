@@ -1,46 +1,55 @@
-import { useDeferredValue, useEffect, useRef, useState, startTransition } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AuthModal from './components/AuthModal'
 import Footer from './components/Footer'
-import { initialArticles } from './data/mockArticles'
 import MainPage from './pages/MainPage'
 import SavedNewsPage from './pages/SavedNewsPage'
+import { fetchArticles } from './utils/newsApi'
 import './App.css'
 
 function App() {
-  const [articles, setArticles] = useState(initialArticles)
+  const [fetchedArticles, setFetchedArticles] = useState([])
+  const [savedIds, setSavedIds] = useState(new Set())
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [activeModal, setActiveModal] = useState(null)
-  const [searchInput, setSearchInput] = useState('climate')
-  const [submittedQuery, setSubmittedQuery] = useState('climate')
+  const [searchInput, setSearchInput] = useState('')
+  const [submittedQuery, setSubmittedQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const searchTimerRef = useRef(null)
+  const [fetchError, setFetchError] = useState(null)
+  const abortRef = useRef(null)
 
-  const deferredQuery = useDeferredValue(submittedQuery)
-  const normalizedQuery = deferredQuery.trim().toLowerCase()
-  const visibleArticles = articles.filter((article) => {
-    if (!normalizedQuery) {
-      return true
-    }
-
-    const searchBlob = [
-      article.title,
-      article.description,
-      article.keyword,
-      article.source,
-    ]
-      .join(' ')
-      .toLowerCase()
-
-    return searchBlob.includes(normalizedQuery)
-  })
+  const articles = fetchedArticles.map((article) => ({
+    ...article,
+    saved: savedIds.has(article.id),
+  }))
 
   const savedArticles = articles.filter((article) => article.saved)
 
+  const runSearch = useCallback(async (query) => {
+    if (abortRef.current) {
+      abortRef.current.abort()
+    }
+
+    abortRef.current = new AbortController()
+    setIsLoading(true)
+    setFetchError(null)
+
+    try {
+      const results = await fetchArticles(query)
+      setFetchedArticles(results)
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        setFetchError(error.message ?? 'Something went wrong. Please try again.')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     return () => {
-      if (searchTimerRef.current) {
-        window.clearTimeout(searchTimerRef.current)
+      if (abortRef.current) {
+        abortRef.current.abort()
       }
     }
   }, [])
@@ -55,18 +64,10 @@ function App() {
 
   function handleSearchSubmit(event) {
     event.preventDefault()
-
-    if (searchTimerRef.current) {
-      window.clearTimeout(searchTimerRef.current)
-    }
-
-    setIsLoading(true)
-    searchTimerRef.current = window.setTimeout(() => {
-      startTransition(() => {
-        setSubmittedQuery(searchInput)
-      })
-      setIsLoading(false)
-    }, 500)
+    const query = searchInput.trim()
+    if (!query) return
+    setSubmittedQuery(query)
+    runSearch(query)
   }
 
   function handleToggleSave(articleId) {
@@ -75,11 +76,15 @@ function App() {
       return
     }
 
-    setArticles((currentArticles) =>
-      currentArticles.map((article) =>
-        article.id === articleId ? { ...article, saved: !article.saved } : article,
-      ),
-    )
+    setSavedIds((current) => {
+      const next = new Set(current)
+      if (next.has(articleId)) {
+        next.delete(articleId)
+      } else {
+        next.add(articleId)
+      }
+      return next
+    })
   }
 
   function handleAuthenticate() {
@@ -98,8 +103,9 @@ function App() {
           path="/"
           element={
             <MainPage
-              articles={visibleArticles}
+              articles={articles}
               isLoading={isLoading}
+              fetchError={fetchError}
               isLoggedIn={isLoggedIn}
               onLoginClick={() => openModal('signin')}
               onLogout={handleLogout}
