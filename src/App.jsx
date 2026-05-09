@@ -130,6 +130,7 @@ function App() {
               isLoading={isLoading}
               fetchError={fetchError}
               isLoggedIn={isLoggedIn}
+              userName={userName}
               onLoginClick={() => openModal('signin')}
               onLogout={handleLogout}
               onOpenSignup={() => openModal('signup')}

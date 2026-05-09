@@ -29,7 +29,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  min-height: 80px;
+  padding-block: 12px;
 }
 
 /* Brand */
@@ -52,7 +55,8 @@
   display: flex;
   align-items: stretch;
   gap: 0;
-  height: 80px;
+  height: auto;
+  margin-left: auto;
 }
 
 .topbar__link {
@@ -89,7 +93,7 @@
   gap: 12px;
   margin-left: 16px;
   padding: 0 20px;
-  height: 48px;
+  min-height: 48px;
   align-self: center;
   border-radius: 100px;
   border: 1px solid var(--color-white);
@@ -99,6 +103,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 180ms ease, color 180ms ease;
+  white-space: nowrap;
 }
 
 .topbar__button--dark {
@@ -117,7 +122,7 @@
 /* ── Hero ── */
 .hero {
   background: var(--color-dark);
-  padding: 80px var(--container-padding) 80px;
+  padding: clamp(56px, 6vw, 80px) var(--container-padding) clamp(56px, 6vw, 80px);
   color: var(--color-white);
 }
 
@@ -143,6 +148,7 @@
 .search-form {
   position: relative;
   display: flex;
+  align-items: stretch;
   margin-top: 88px;
   background: var(--color-white);
   border-radius: 100px;
@@ -152,7 +158,8 @@
 
 .search-form__input {
   flex: 1;
-  height: 64px;
+  min-width: 0;
+  min-height: 64px;
   padding: 0 24px;
   border: none;
   background: transparent;
@@ -167,8 +174,8 @@
 
 .search-form__button {
   flex-shrink: 0;
-  height: 64px;
-  padding: 0 56px;
+  min-height: 64px;
+  padding: 0 clamp(32px, 5vw, 56px);
   border: none;
   border-radius: 100px;
   background: var(--color-blue);
@@ -198,7 +205,7 @@
 
 /* ── Results section ── */
 .cards {
-  padding: 80px 0 80px;
+  padding: clamp(64px, 6vw, 80px) 0;
   flex: 1;
 }
 
@@ -230,8 +237,8 @@
 
 .cards__more {
   display: block;
-  width: 288px;
-  height: 64px;
+  width: min(100%, 288px);
+  min-height: 64px;
   margin: 64px auto 0;
   border-radius: 80px;
   border: none;
@@ -255,7 +262,7 @@
   align-items: center;
   justify-content: center;
   gap: 24px;
-  min-height: 400px;
+  min-height: clamp(320px, 40vh, 400px);
   padding: 0 24px;
   text-align: center;
 }
@@ -319,7 +326,7 @@
 .card__image-link {
   display: block;
   overflow: hidden;
-  height: 272px;
+  aspect-ratio: 16 / 9;
   flex-shrink: 0;
 }
 
@@ -337,9 +344,9 @@
 
 .card__keyword {
   position: absolute;
-  top: 24px;
-  left: 24px;
-  padding: 8px 22px;
+  top: clamp(16px, 2vw, 24px);
+  left: clamp(16px, 2vw, 24px);
+  padding: 8px clamp(14px, 2vw, 22px);
   background: var(--color-white);
   border-radius: 10px;
   font-size: 0.875rem;
@@ -351,8 +358,8 @@
 
 .card__bookmark {
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: clamp(16px, 2vw, 24px);
+  right: clamp(16px, 2vw, 24px);
   width: 40px;
   height: 40px;
   display: flex;
@@ -451,7 +458,7 @@
 /* ── Saved News hero ── */
 .saved-hero {
   background: var(--color-white);
-  padding: 40px 0 56px;
+  padding: clamp(32px, 4vw, 40px) 0 clamp(40px, 5vw, 56px);
 }
 
 .saved-hero__label {
@@ -484,10 +491,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  min-height: 80px;
   background: var(--color-white);
   border-top: 1px solid var(--color-border);
-  padding: 0 var(--container-padding);
+  padding: 16px var(--container-padding);
 }
 
 .footer__copy {
@@ -527,7 +534,7 @@
   width: min(100%, 430px);
   background: var(--color-white);
   border-radius: 16px;
-  padding: 34px 36px 28px;
+  padding: clamp(28px, 4vw, 34px) clamp(20px, 4vw, 36px) clamp(24px, 3vw, 28px);
 }
 
 .modal__header {
@@ -615,7 +622,7 @@
 
 .modal__submit {
   width: 100%;
-  height: 58px;
+  min-height: 58px;
   margin-top: 10px;
   border: none;
   border-radius: 100px;
@@ -652,7 +659,7 @@
 /* Success state */
 .modal--success {
   text-align: center;
-  padding: 60px 36px;
+  padding: clamp(48px, 6vw, 60px) clamp(20px, 4vw, 36px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -683,7 +690,7 @@
 
 /* ── Responsive ── */
 @media (max-width: 1200px) {
-  :root { --container-padding: 40px; }
+  :root { --container-padding: clamp(32px, 4vw, 40px); }
   .cards__grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -706,17 +713,28 @@
   .search-form__input {
     background: var(--color-white);
     border-radius: 100px;
+    width: 100%;
   }
 
   .search-form__button {
+    width: 100%;
     padding: 0;
     border-radius: 100px;
   }
 
   .cards__grid { grid-template-columns: 1fr; }
 
+  .topbar__content {
+    min-height: 72px;
+  }
+
+  .topbar__nav {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
   .topbar__link { padding: 0 10px; font-size: 1rem; }
-  .topbar__button { padding: 0 14px; font-size: 1rem; }
+  .topbar__button { padding: 0 14px; font-size: 1rem; margin-left: 12px; }
 
   .footer {
     flex-direction: column;

@@ -7,6 +7,7 @@ function MainPage({
   isLoading,
   fetchError,
   isLoggedIn,
+  userName,
   onLoginClick,
   onLogout,
   onSaveArticle,
@@ -17,7 +18,7 @@ function MainPage({
 }) {
   return (
     <div className="page page-main">
-      <Header isLoggedIn={isLoggedIn} onLoginClick={onLoginClick} onLogout={onLogout} userName="Marquis" />
+      <Header isLoggedIn={isLoggedIn} onLoginClick={onLoginClick} onLogout={onLogout} userName={userName} />
 
       <section className="hero">
         <div className="hero__inner">

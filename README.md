@@ -6,6 +6,10 @@ Stage 1 frontend workspace for the TripleTen final project.
 
 https://avahaulick.github.io/Final-Project/
 
+## Video Demo
+
+https://www.loom.com/share/48c1a7e3389d48a8a3eb79ea0e4da72d
+
 ## Stack
 
 - React
