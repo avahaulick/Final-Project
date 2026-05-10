@@ -1,3 +1,4 @@
+import AboutSection from '../components/AboutSection'
 import Header from '../components/Header'
 import NewsCardList from '../components/NewsCardList'
 import SearchForm from '../components/SearchForm'
@@ -29,6 +30,8 @@ function MainPage({
           <SearchForm onSearchSubmit={onSearchSubmit} onQueryChange={onQueryChange} query={query} />
         </div>
       </section>
+
+      <AboutSection />
 
       <NewsCardList
         key={submittedQuery}

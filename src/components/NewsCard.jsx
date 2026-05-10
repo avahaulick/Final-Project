@@ -2,6 +2,15 @@ import fallbackImage from '../assets/hero.png'
 
 const FALLBACK_IMAGE = fallbackImage
 
+function getImageSource(image) {
+  if (typeof image !== 'string') {
+    return FALLBACK_IMAGE
+  }
+
+  const trimmedImage = image.trim()
+  return trimmedImage ? trimmedImage : FALLBACK_IMAGE
+}
+
 function BookmarkIcon({ filled }) {
   return (
     <svg
@@ -34,7 +43,7 @@ function NewsCard({ article, onSaveArticle, isLoggedIn }) {
       >
         <img
           className="card__image"
-          src={article.image ?? FALLBACK_IMAGE}
+          src={getImageSource(article.image)}
           alt={article.title || 'News article image'}
           onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE }}
         />

@@ -14,13 +14,32 @@ function getToDate() {
   return new Date().toISOString().slice(0, 10)
 }
 
+function normalizeImageUrl(url) {
+  if (typeof url !== 'string') {
+    return null
+  }
+
+  const trimmedUrl = url.trim()
+  if (!trimmedUrl || trimmedUrl === '[Removed]') {
+    return null
+  }
+
+  try {
+    const parsedUrl = new URL(trimmedUrl)
+    return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:' ? trimmedUrl : null
+  } catch {
+    return null
+  }
+}
+
 /**
  * Fetch news articles for a given keyword.
  * Returns an array of normalized article objects.
  * @param {string} query
+ * @param {AbortSignal} [signal]
  * @returns {Promise<Array>}
  */
-export async function fetchArticles(query) {
+export async function fetchArticles(query, signal) {
   if (!query || !query.trim()) {
     return []
   }
@@ -33,7 +52,7 @@ export async function fetchArticles(query) {
     apiKey: API_KEY,
   })
 
-  const response = await fetch(`${BASE_URL}?${params}`)
+  const response = await fetch(`${BASE_URL}?${params}`, { signal })
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}))
@@ -57,7 +76,7 @@ export async function fetchArticles(query) {
         : '',
       source: article.source?.name ?? '',
       url: article.url ?? '',
-      image: article.urlToImage ?? null,
+      image: normalizeImageUrl(article.urlToImage),
       keyword: query.trim(),
       saved: false,
     }))

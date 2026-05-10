@@ -42,7 +42,7 @@ function App() {
     setFetchError(null)
 
     try {
-      const results = await fetchArticles(query)
+      const results = await fetchArticles(query, abortRef.current.signal)
       setFetchedArticles(results)
     } catch (error) {
       if (error.name !== 'AbortError') {
