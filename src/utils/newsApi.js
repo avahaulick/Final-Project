@@ -1,8 +1,8 @@
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY
-const BASE_URL =
-  import.meta.env.MODE === 'production'
-    ? 'https://nomoreparties.co/news/v2/everything'
-    : 'https://newsapi.org/v2/everything'
+const MODE = import.meta.env.MODE
+const DIRECT_NEWS_API_URL = 'https://newsapi.org/v2/everything'
+const TRIPLETEN_PROXY_URL = 'https://nomoreparties.co/news/v2/everything'
+const ALL_ORIGINS_PROXY_URL = 'https://api.allorigins.win/raw?url='
 
 function getFromDate() {
   const d = new Date()
@@ -44,40 +44,68 @@ export async function fetchArticles(query, signal) {
     return []
   }
 
+  if (!API_KEY) {
+    throw new Error('Missing API key. Set VITE_NEWS_API_KEY in your environment.')
+  }
+
+  const normalizedQuery = query.trim()
   const params = new URLSearchParams({
-    q: query.trim(),
+    q: normalizedQuery,
     from: getFromDate(),
     to: getToDate(),
     pageSize: '100',
     apiKey: API_KEY,
   })
 
-  const response = await fetch(`${BASE_URL}?${params}`, { signal })
+  const directUrl = `${DIRECT_NEWS_API_URL}?${params}`
+  const candidates =
+    MODE === 'production'
+      ? [
+          `${TRIPLETEN_PROXY_URL}?${params}`,
+          `${ALL_ORIGINS_PROXY_URL}${encodeURIComponent(directUrl)}`,
+        ]
+      : [directUrl]
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}))
-    throw new Error(error.message ?? `NewsAPI error: ${response.status}`)
+  let lastError = null
+
+  for (const requestUrl of candidates) {
+    try {
+      const response = await fetch(requestUrl, { signal })
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        lastError = new Error(error.message ?? `NewsAPI error: ${response.status}`)
+        continue
+      }
+
+      const data = await response.json()
+
+      return (data.articles ?? [])
+        .filter((article) => article.url !== '[Removed]' && article.title !== '[Removed]')
+        .map((article, index) => ({
+          id: `${normalizedQuery}-${index}-${article.publishedAt}`,
+          title: article.title ?? '',
+          description: article.description ?? '',
+          date: article.publishedAt
+            ? new Intl.DateTimeFormat('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              }).format(new Date(article.publishedAt))
+            : '',
+          source: article.source?.name ?? '',
+          url: article.url ?? '',
+          image: normalizeImageUrl(article.urlToImage),
+          keyword: normalizedQuery,
+          saved: false,
+        }))
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        throw error
+      }
+      lastError = error
+    }
   }
 
-  const data = await response.json()
-
-  return (data.articles ?? [])
-    .filter((article) => article.url !== '[Removed]' && article.title !== '[Removed]')
-    .map((article, index) => ({
-      id: `${query}-${index}-${article.publishedAt}`,
-      title: article.title ?? '',
-      description: article.description ?? '',
-      date: article.publishedAt
-        ? new Intl.DateTimeFormat('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          }).format(new Date(article.publishedAt))
-        : '',
-      source: article.source?.name ?? '',
-      url: article.url ?? '',
-      image: normalizeImageUrl(article.urlToImage),
-      keyword: query.trim(),
-      saved: false,
-    }))
+  throw new Error(lastError?.message ?? 'Sorry, something went wrong during the request. Please try again later.')
 }
