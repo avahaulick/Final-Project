@@ -1,4 +1,4 @@
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY
+const API_KEY = '7978b0ee3fe5496e97666f48ba9b6f37'
 const MODE = import.meta.env.MODE
 const DIRECT_NEWS_API_URL = 'https://newsapi.org/v2/everything'
 const TRIPLETEN_PROXY_URL = 'https://nomoreparties.co/news/v2/everything'
